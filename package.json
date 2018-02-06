@@ -1,0 +1,18 @@
+{
+  "name": "tr",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ioredis": "^3.2.2",
+    "jsonwebtoken": "^8.1.1",
+    "socket.io": "^2.0.4",
+    "socket.io-redis": "^5.2.0",
+    "winston": "^2.4.0"
+  }
+}
