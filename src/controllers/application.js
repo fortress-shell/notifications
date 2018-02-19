@@ -7,9 +7,6 @@ class ApplicationController {
   constructor(io, redis) {
     this.io = io;
     this.redis = redis;
-    this.onExit = this.onExit.bind(this);
-    this.onConnection = this.onConnection.bind(this);
-    this.onAuthentication = this.onAuthentication.bind(this);
   }
   onExit() {
     this.io.close();

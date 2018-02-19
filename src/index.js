@@ -9,8 +9,8 @@ const notifications = new ApplicationController(io, redis);
 
 logger.log('Applications started!');
 
-io.use(notifications.onAuthentication);
-io.on('connection', notifications.onConnection);
+io.use(notifications.onAuthentication.bind(notifications));
+io.on('connection', notifications.onConnection.bind(notifications));
 
 function onShutdown() {
   logger.log('Applications shutdown!');
