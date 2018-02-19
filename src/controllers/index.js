@@ -3,14 +3,9 @@ const SECRET_TOKEN = config.get('SECRET_TOKEN');
 const jwt = require('jsonwebtoken');
 const logger = require('src/utils/logger');
 
-class ApplicationController {
-  constructor(io, redis) {
-    this.io = io;
+class NotificationsController {
+  constructor(redis) {
     this.redis = redis;
-  }
-  onExit() {
-    this.io.close();
-    this.redis.disconnect();
   }
   onConnection(socket) {
     const {session} = socket;
@@ -39,4 +34,4 @@ class ApplicationController {
   }
 }
 
-module.exports = ApplicationController;
+module.exports = NotificationsController;

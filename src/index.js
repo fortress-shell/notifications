@@ -1,11 +1,10 @@
 const io = require('src/resources/io');
 const redis = require('src/resources/redis');
 const server = require('src/resources/server');
-const Logger = require('src/utils/logger');
 const debug = require('debug');
 const logger = require('src/utils/logger');
-const ApplicationController = require('controllers/application-controller');
-const notifications = new ApplicationController(io, redis);
+const NotificationsController = require('src/controllers');
+const notifications = new NotificationsController(io, redis);
 
 logger.log('Applications started!');
 
