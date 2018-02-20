@@ -1,11 +1,9 @@
 'use strict';
-const dotenv = require('dotenv');
 const nconf = require('nconf');
-const result = dotenv.config();
-if (result.error) {
-  throw result.error;
-}
+const path = require('path');
 nconf.env([
+  'PORT',
+  'IP',
   'NODE_ENV',
   'REDIS_URL',
   'SECRET_TOKEN',
@@ -16,6 +14,8 @@ nconf.defaults({
 nconf.required([
   'REDIS_URL',
   'SECRET_TOKEN',
+  'PORT',
+  'IP',
 ]);
 const NODE_ENV = nconf.get('NODE_ENV');
 nconf.file(NODE_ENV, {

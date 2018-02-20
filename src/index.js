@@ -1,6 +1,6 @@
 const io = require('src/resources/io');
 const redis = require('src/resources/redis');
-// const server = require('src/resources/server');
+const server = require('src/resources/server');
 const logger = require('src/utils/logger');
 const NotificationsController = require('src/controllers/notifications');
 const config = require('src/config');
@@ -17,6 +17,7 @@ io.on('connection', notifications.onConnection.bind(notifications));
  */
 function onShutdown() {
   logger.log('Applications shutdown!');
+  server.close();
 }
 
 for (const event of ['SIGINT', 'SIGTERM']) {
