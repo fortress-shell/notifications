@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const logger = require('src/utils/logger');
+const {CHECK_BUILD_PERMISSIONS} = require('src/queries/build');
 
 /**
  * Notifications controller
@@ -10,8 +11,8 @@ class NotificationsController {
      * @param  {Object} redis       redis connection
      * @param  {String} secretToken secret token for jwt
      */
-  constructor(redis, secretToken) {
-    this.redis = redis;
+  constructor(db, secretToken) {
+    this.db = db;
     this.secretToken = secretToken;
   }
   /**
@@ -19,12 +20,29 @@ class NotificationsController {
    * @param  {Object} socket ws connection
    */
   onConnection(socket) {
-    const {session} = socket;
-    socket.join(`user:${session.user_id}`);
-    logger.info('User attached', session);
-    socket.on('disconnect', (reason) => {
-      logger.info('User detached', reason, session);
-    });
+    socket.on('build:subscribe', this.subscribeToBuild.bind(this, socket));
+    socket.join(`user:${socket.session.user_id}`);
+    socket.on('disconnect', this.onDisconnect);
+    logger.info('User attached', socket.session);
+  }
+  /**
+   * Subscribe to build
+   * @param  {Object} socket [description]
+   * @param  {String} id     [description]
+   */
+  async subscribeToBuild(socket, id) {
+    if (await this.db.oneOrNone(CHECK_BUILD_PERMISSIONS, {id})) {
+      socket.join(`build:${id}`);
+    } else {
+      socket.disconnect(true);
+    }
+  }
+  /**
+   * [description]
+   * @param  {[type]} reason [description]
+   */
+  onDisconnect(reason) {
+    logger.info('User detached', reason, session);
   }
   /**
    * Middleware to handle authentication
@@ -34,16 +52,8 @@ class NotificationsController {
   async onAuthentication(socket, next) {
     try {
       const token = socket.request.headers.cookie.token;
-      if (!token) {
-        throw new TypeError('Token is not present!');
-      }
       const payload = jwt.verify(token, this.secretToken);
-      const sessionKey = `session:${payload.session_id}`;
-      const result = await this.redis.get(sessionKey);
-      if (!result) {
-        throw new TypeError('Missing session!');
-      }
-      socket.session = JSON.parse(result);
+      socket.session = await this.db.one(SELECT_SESSION, payload);
     } catch (e) {
       logger.warn('Error happened on login', e);
       next(new TypeError('Authentication error!'));
