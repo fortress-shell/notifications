@@ -1,9 +1,10 @@
-const config = require('src/config');
 const http = require('http');
-const PORT = config.get('ADDV_PORT');
-const IP = config.get('ADDV_IP');
-const server = http.createServer((req, res) => res.end('OK'));
+const server = http.createServer();
+const config = require('src/config');
+const logger = require('src/utils/logger');
+const PORT = config.get('socket.io:port');
+const IP = config.get('socket.io:ip');
 
-server.listen(PORT, IP);
+logger.info(`Server will serve on ip ${IP} and port ${PORT}`);
 
-module.exports = server;
+module.exports = server.listen(PORT, IP);

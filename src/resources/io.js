@@ -1,17 +1,9 @@
-const socketIo = require('socket.io');
 const redis = require('socket.io-redis');
 const client = require('src/resources/redis');
-const server = require('src/resources/server');
-const io = socketIo(server, {
-  path: '/notifications',
-  serveClient: false,
-  transports: ['websocket'],
+const config = require('src/config');
+const io = require('socket.io')({
+  path: config.get('socket.io:path'),
 });
-const redisAdapter = redis({
-  pubClient: client,
-  subClient: client,
-});
-
-io.adapter(redisAdapter);
+io.adapter(redis(client));
 
 module.exports = io;

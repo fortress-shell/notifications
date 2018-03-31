@@ -5,9 +5,18 @@ const REDIS_URL = config.get('REDIS_URL');
 const redisUrls = REDIS_URL.split(',');
 
 if (redisUrls.length > 1) {
-  module.exports = new Redis.Cluster(redisUrls);
+  const cluster = new Redis.Cluster(redisUrls);
+  module.exports = {
+    pubClient: cluster,
+    subClient: cluster,
+  };
 } else if (redisUrls.length === 1) {
-  module.exports = new Redis(REDIS_URL);
+  const pubClient = new Redis(REDIS_URL);
+  const subClient = pubClient.duplicate();
+  module.exports = {
+    pubClient,
+    subClient,
+  };
 } else {
-  throw new TypeError('Specify REDIS_URL env!');
+  throw new TypeError('REDIS_URL is incorrect!');
 }

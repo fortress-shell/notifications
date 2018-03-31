@@ -1,12 +1,6 @@
 const debug = require('debug');
-const info = debug('notifications:info');
-const warn = debug('notifications:warn');
-const log = debug('notifications:log');
-const error = debug('notifications:error');
 
-module.exports = {
-  info,
-  warn,
-  log,
-  error,
-};
+exports.info = debug('notifications:info');
+exports.warn = debug('notifications:warn');
+exports.log = debug('notifications:log');
+exports.error = debug('notifications:error');
