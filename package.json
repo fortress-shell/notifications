@@ -5,18 +5,20 @@
   "main": "src/index.js",
   "scripts": {
     "dev": "cross-env NODE_PATH=. DEBUG=notifications:* nodemon",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "cross-env NODE_PATH=. NODE_ENV=testing nyc mocha",
     "pretest": "eslint ."
   },
   "author": "Mikhail Faraponov",
   "license": "ISC",
   "dependencies": {
+    "chai": "^4.1.2",
     "debug": "^3.1.0",
     "ioredis": "^3.2.2",
     "jsonwebtoken": "^8.1.1",
     "moment": "^2.21.0",
     "nconf": "^0.10.0",
     "pg-promise": "^7.5.4",
+    "sinon": "^4.5.0",
     "socket.io": "^2.0.4",
     "socket.io-cookie-parser": "^1.0.0",
     "socket.io-redis": "^5.2.0"
