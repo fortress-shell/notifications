@@ -51,7 +51,7 @@ class NotificationsController {
     logger.info(this.USER_ATTACHED, session);
     socket.join(userRoomId);
     const timeout = setTimeout(onSessionEnd, sessionEnd);
-    const onDisconnect = this.onDisconnect.bind(this, socket, timeout);
+    const onDisconnect = this.onDisconnect.bind(this, socket, timeout);                      t
     socket.on('disconnect', onDisconnect);
   }
   /**
